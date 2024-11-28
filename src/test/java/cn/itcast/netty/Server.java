@@ -36,14 +36,15 @@ public class Server {
         List<SocketChannel> channels = new ArrayList<>();
         while (true) {
             // 4. accept 建立与客户端连接, SocketChannel 用来与客户端之间通信
-            SocketChannel sc = ssc.accept();
+            log.debug("连接中...");
+            SocketChannel sc = ssc.accept(); //阻塞方法，等待连接后才会继续执行
+            log.debug("connected... {}", sc);
             channels.add(sc);
 
             for (SocketChannel channel : channels) {
                 // 5. 接收客户端发送的数据
-                log.debug("连接中...");
-                channel.read(buffer);
-                log.debug("connected... {}", sc);
+                log.debug("before read...{}", channel);
+                channel.read(buffer); //read也是阻塞方法,需要等待客户端发送数据后才会继续向下执行
                 buffer.flip();
                 debugRead(buffer);
                 buffer.clear();
