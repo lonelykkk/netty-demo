@@ -18,6 +18,10 @@ public class TestWalkFileTree {
         // m1();
 
         // m2();
+
+        // m3()
+
+        // m4()
     }
 
     /**
@@ -67,5 +71,56 @@ public class TestWalkFileTree {
         });
         System.out.println(dirCount); // 133
         System.out.println(fileCount); // 1479
+    }
+
+    /**
+     * 删除多级目录
+     * @throws IOException
+     */
+    private static void m3() throws IOException {
+        Path path = Paths.get("d:\\a");
+        Files.walkFileTree(path, new SimpleFileVisitor<Path>(){
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs)
+                    throws IOException {
+                Files.delete(file);
+                return super.visitFile(file, attrs);
+            }
+
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException exc)
+                    throws IOException {
+                Files.delete(dir);
+                return super.postVisitDirectory(dir, exc);
+            }
+        });
+    }
+
+    /**
+     * 拷贝多级目录
+     * @throws IOException
+     */
+    private static void m4() throws  IOException {
+        long start = System.currentTimeMillis();
+        String source = "D:\\Snipaste-1.16.2-x64";
+        String target = "D:\\Snipaste-1.16.2-x64aaa";
+
+        Files.walk(Paths.get(source)).forEach(path -> {
+            try {
+                String targetName = path.toString().replace(source, target);
+                // 是目录
+                if (Files.isDirectory(path)) {
+                    Files.createDirectory(Paths.get(targetName));
+                }
+                // 是普通文件
+                else if (Files.isRegularFile(path)) {
+                    Files.copy(path, Paths.get(targetName));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        long end = System.currentTimeMillis();
+        System.out.println(end - start);
     }
 }
