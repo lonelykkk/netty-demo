@@ -20,7 +20,12 @@ public class TestFileChannelTransferTo {
              FileChannel to = new FileOutputStream("to.txt").getChannel();
              ) {
             //效率高，底层会利用操作系统的零拷贝进行优化
-            from.transferTo(0, from.size(), to);
+            long size = from.size();
+            // left 代表还剩余多少字节
+            for (long left = size; left > 0;) {
+                left -= from.transferTo((size-left), left, to);
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
