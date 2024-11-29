@@ -28,7 +28,7 @@ public class MultiThreadServer {
         ssc.bind(new InetSocketAddress(8080));
         // 1. 创建固定数量的worker 并初始化
         Worker worker = new Worker("worker-0");
-        worker.register();
+
 
         while (true) {
             boss.select();
@@ -42,6 +42,7 @@ public class MultiThreadServer {
                     log.debug("connect...{}",sc.getRemoteAddress());
                     // 2. 关联selector
                     log.debug("before register...{}",sc.getRemoteAddress());
+                    worker.register(); // 初始化selector，启动worker-0
                     sc.register(worker.selector, SelectionKey.OP_READ);
                     log.debug("after register...{}",sc.getRemoteAddress());
                 }
