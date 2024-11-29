@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import static cn.itcast.nio.c2.ByteBufferUtil.debugAll;
 
 /**
+ * 使用消息队列解决线程问题
  * @author lonelykkk
  * @email 2765314967@qq.com
  * @date 2024/11/29 15:51
