@@ -44,6 +44,7 @@ public class Server2 {
         ssc.bind(new InetSocketAddress(8080));
         while (true) {
             // 3. select方法,没有事件发生，线程阻塞，有事件，线程才会恢复运行
+            // select方法在时间未处理时，不会阻塞,事件发生后要么处理要么取消，不能置之不理
             selector.select();
 
             // 4. 处理事件，selectedKeys内部包含了所有发生的事件
@@ -51,9 +52,12 @@ public class Server2 {
             while (iter.hasNext()) {
                 SelectionKey key = iter.next();
                 log.debug("register key:{}",key);
-                ServerSocketChannel channel = (ServerSocketChannel) key.channel();
+
+                //如果事件不处理，会重新将这个事件交给selector，从而导致死循环
+                /*ServerSocketChannel channel = (ServerSocketChannel) key.channel();
                 SocketChannel sc = channel.accept();
-                log.debug("{}", sc);
+                log.debug("{}", sc);*/
+                key.cancel();
             }
         }
     }
