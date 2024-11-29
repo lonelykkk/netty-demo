@@ -7,6 +7,7 @@ import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
 import java.util.Iterator;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static cn.itcast.nio.c2.ByteBufferUtil.debugAll;
 
@@ -42,8 +43,7 @@ public class MultiThreadServer {
                     log.debug("connect...{}",sc.getRemoteAddress());
                     // 2. 关联selector
                     log.debug("before register...{}",sc.getRemoteAddress());
-                    worker.register(); // 初始化selector，启动worker-0
-                    sc.register(worker.selector, SelectionKey.OP_READ);
+                    worker.register(sc); // 初始化selector，启动worker-0
                     log.debug("after register...{}",sc.getRemoteAddress());
                 }
             }
@@ -55,6 +55,7 @@ public class MultiThreadServer {
         private Selector selector;
         private String name;
         private volatile boolean start = false;
+        private ConcurrentLinkedQueue<Runnable> queue = new ConcurrentLinkedQueue<>();
 
         public Worker(String name) {
             this.name = name;
@@ -63,21 +64,33 @@ public class MultiThreadServer {
         /**
          * 初始化线程和selector
          */
-        public void register() throws IOException {
+        public void register(SocketChannel sc) throws IOException {
             if (!start) {
                 selector = Selector.open();
                 thread = new Thread(this,name);
                 thread.start();
                 start = true;
             }
-
+            // 向队列添加任务,但这个任务并没有立即执行，而是放到worker-0线程中消费执行
+            queue.add(() -> {
+                try {
+                    sc.register(this.selector, SelectionKey.OP_READ);
+                } catch (ClosedChannelException e) {
+                    e.printStackTrace();
+                }
+            });
+            selector.wakeup(); //唤醒selector
         }
 
         @Override
         public void run() {
             while (true) {
                 try {
-                    selector.select();
+                    selector.select(); //worker-0 阻塞 wakeup也可以实现
+                    Runnable task = queue.poll();
+                    if (task != null) {
+                        task.run(); //执行了 sc.register(this.selector, SelectionKey.OP_READ);
+                    }
                     Iterator<SelectionKey> iter = selector.selectedKeys().iterator();
                     while (iter.hasNext()) {
                         SelectionKey key = iter.next();
