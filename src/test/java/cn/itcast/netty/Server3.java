@@ -48,6 +48,9 @@ public class Server3 {
             Iterator<SelectionKey> iter = selector.selectedKeys().iterator();
             while (iter.hasNext()) {
                 SelectionKey key = iter.next();
+                //处理key的时候一定要从selectedKeys 删除
+                iter.remove();
+
                 log.debug("register key:{}",key);
 
                 //如果事件不处理，会重新将这个事件交给selector，从而导致死循环
@@ -60,6 +63,7 @@ public class Server3 {
                     SelectionKey scKey = sc.register(selector, 0, null);
                     scKey.interestOps(SelectionKey.OP_READ); //设置只关注读事件
                     log.debug("{}", sc);
+                    log.debug("scKey:{}",scKey);
                 } else if (key.isReadable()) {  // 如果是read
                     SocketChannel channel = (SocketChannel) key.channel(); //拿到触发时间的channel
                     ByteBuffer buffer = ByteBuffer.allocate(16);
