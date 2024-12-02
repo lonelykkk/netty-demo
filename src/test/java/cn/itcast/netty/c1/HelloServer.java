@@ -6,6 +6,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.string.StringDecoder;
 
 /**
@@ -25,9 +26,9 @@ public class HelloServer {
                 // 4. boss负责处理连接, worker(child)负责处理读写，决定了 worker(child) 能执行哪些操作(handler)
                 .childHandler(
                         // 5. channel 代表和客户端进行数据读写的通道 Initializer 初始化
-                    new ChannelInitializer<NioServerSocketChannel>() {
+                    new ChannelInitializer<NioSocketChannel>() {
                     @Override
-                    protected void initChannel(NioServerSocketChannel ch) throws Exception {
+                    protected void initChannel(NioSocketChannel ch) throws Exception {
                         // 6. 添加具体 handler
                         ch.pipeline().addLast(new StringDecoder()); // 将 ByteBuf 转换为字符串
                         ch.pipeline().addLast(new ChannelInboundHandlerAdapter(){ // 自定义 handler
@@ -39,6 +40,6 @@ public class HelloServer {
                         });
                     }
                 })
-                .bind(8080);
+                .bind(8087);
     }
 }
