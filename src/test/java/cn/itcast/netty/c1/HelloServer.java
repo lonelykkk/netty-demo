@@ -22,7 +22,7 @@ public class HelloServer {
                 // 2. BossEventLoop, WorkerEventLoop(selector,thread), group组
                 .group(new NioEventLoopGroup())
                 // 3. 选择服务器的 ServerSocketChannel 实现
-                .channel(NioServerSocketChannel.class)
+                .channel(NioServerSocketChannel.class) //OIO BIO
                 // 4. boss负责处理连接, worker(child)负责处理读写，决定了 worker(child) 能执行哪些操作(handler)
                 .childHandler(
                         // 5. channel 代表和客户端进行数据读写的通道 Initializer 初始化
