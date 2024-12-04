@@ -1,7 +1,9 @@
-package cn.itcast.netty.c1;
+package cn.itcast.netty.test02;
 
+import io.netty.channel.DefaultEventLoopGroup;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.util.NettyRuntime;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.TimeUnit;
