@@ -15,13 +15,17 @@ import lombok.extern.slf4j.Slf4j;
 import java.net.InetSocketAddress;
 import java.util.Scanner;
 
-
+/**
+ *  P68-netty入门-ChannelFuture-处理关闭
+ *  P69-netty入门-ChannelFuture-处理关闭
+ */
 @Slf4j
-public class CloseFutureClient {
+public class CloseFutureClient2 {
     public static void main(String[] args) throws InterruptedException {
+        NioEventLoopGroup group = new NioEventLoopGroup();
         // 2. 带有 Future，Promise 的类型都是和 异步方法配套使用，用来正确的处理结果
         ChannelFuture channelFuture = new Bootstrap()
-                .group(new NioEventLoopGroup())
+                .group(group)
                 .channel(NioSocketChannel.class)
                 .handler(new ChannelInitializer<NioSocketChannel>() {
 
@@ -48,6 +52,20 @@ public class CloseFutureClient {
                 channel.writeAndFlush(line);
             }
         },"input").start();
-        log.debug("处理关闭后的操作");
+
+        // 获取 CloseFuture 对象， 1) 同步处理关闭， 2) 异步处理关闭
+        ChannelFuture closeFuture = channel.closeFuture();
+        // 1.
+        /*System.out.println("等待关闭...");
+        closeFuture.sync();
+        log.debug("处理关闭后的操作");*/
+        // 2.
+        closeFuture.addListener(new ChannelFutureListener() {
+            @Override
+            public void operationComplete(ChannelFuture channelFuture) throws Exception {
+                log.debug("处理关闭后的操作");
+                group.shutdownGracefully();
+            }
+        });
     }
 }
