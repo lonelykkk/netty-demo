@@ -1,4 +1,4 @@
-package cn.itcast.netty.test02;
+package cn.itcast.netty.test03;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
@@ -17,7 +17,7 @@ import java.nio.charset.Charset;
  * @Version V1.0
  */
 @Slf4j
-public class EventLoopServer2 {
+public class EventLoopServer {
     public static void main(String[] args) {
         // 细分2 创建一个独立的 EventLoopGroup
         EventLoopGroup group = new DefaultEventLoopGroup();
