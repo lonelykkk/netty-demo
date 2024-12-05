@@ -1,4 +1,4 @@
-package cn.itcast.netty.test05;
+package cn.itcast.netty.test04;
 
 import lombok.extern.slf4j.Slf4j;
 
