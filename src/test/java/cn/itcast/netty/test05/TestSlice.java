@@ -6,6 +6,7 @@ import io.netty.buffer.ByteBufAllocator;
 import static cn.itcast.netty.test04.TestByteBuf.log;
 
 /**
+ * P87-netty入门-byteBuf-零拷贝-slice
  * @author lonelykkk
  * @email 2765314967@qq.com
  * @date 2024/12/6 16:27
@@ -19,11 +20,13 @@ public class TestSlice {
 
         // 在切片过程中没有发生数据复制
         ByteBuf f1 = buf.slice(0, 5);
+        f1.retain();
         ByteBuf f2 = buf.slice(5, 5);
         log(f1);
         log(f2);
 
         f1.setByte(0, 'b');
+        f1.release();
         log(f1);
         log(buf);
     }
