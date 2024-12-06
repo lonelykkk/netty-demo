@@ -6,7 +6,9 @@ import io.netty.buffer.CompositeByteBuf;
 
 import static cn.itcast.netty.test04.TestByteBuf.log;
 
-
+/**
+ * P88-netty入门-byteBuf-零拷贝-composite
+ */
 public class TestCompositeByteBuf {
     public static void main(String[] args) {
         ByteBuf buf1 = ByteBufAllocator.DEFAULT.buffer();
