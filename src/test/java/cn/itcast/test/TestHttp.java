@@ -28,15 +28,28 @@ public class TestHttp {
                 protected void initChannel(SocketChannel ch) throws Exception {
                     ch.pipeline().addLast(new LoggingHandler(LogLevel.DEBUG));
                     ch.pipeline().addLast(new HttpServerCodec());
+                    // 自定义处理器
+                    /*ch.pipeline().addLast(new ChannelInboundHandlerAdapter() {
+                        @Override
+                        public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+                            log.debug("{}", msg.getClass());
+                            if (msg instanceof HttpRequest) {
+                                //请求行，请求头
+                            } else if (msg instanceof HttpContent) {
+                                //请求体
+                            }
+                        }
+                    });*/
                     ch.pipeline().addLast(new SimpleChannelInboundHandler<DefaultHttpRequest>() {
                         @Override
                         protected void channelRead0(ChannelHandlerContext ctx, DefaultHttpRequest msg) throws Exception {
                             log.debug("{}", msg.uri());
                             QueryStringDecoder decoder = new QueryStringDecoder(msg.uri());
                             List<String> name = decoder.parameters().get("name");
+                            // 返回响应
                             DefaultFullHttpResponse response = new DefaultFullHttpResponse(msg.protocolVersion(), HttpResponseStatus.OK);
                             byte[] bytes = ("<h1>hello!" + name.get(0) + "</h1>").getBytes();
-                            response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/html");
+                            //response.headers().set(HttpHeaderNames.CONTENT_TYPE, "text/html");
                             response.headers().setInt(HttpHeaderNames.CONTENT_LENGTH, bytes.length);
                             response.content().writeBytes(bytes);
                             ctx.writeAndFlush(response);
