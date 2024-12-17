@@ -18,6 +18,11 @@ import java.util.Random;
 public class HelloWorldClient {
     static final Logger log = LoggerFactory.getLogger(HelloWorldClient.class);
     public static void main(String[] args) {
+        send();
+        System.out.println("finish");
+    }
+
+    private static void send() {
         NioEventLoopGroup worker = new NioEventLoopGroup();
         try {
             Bootstrap bootstrap = new Bootstrap();
