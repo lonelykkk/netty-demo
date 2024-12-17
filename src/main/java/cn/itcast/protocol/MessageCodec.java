@@ -13,6 +13,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
 
+/**
+ * p103-netty进阶-协议设计与解析-解码
+ */
 @Slf4j
 @ChannelHandler.Sharable
 public class MessageCodec extends ByteToMessageCodec<Message> {
