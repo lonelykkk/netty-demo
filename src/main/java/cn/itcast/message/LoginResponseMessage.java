@@ -10,4 +10,11 @@ public class LoginResponseMessage extends AbstractResponseMessage {
     public int getMessageType() {
         return LoginResponseMessage;
     }
+
+    public LoginResponseMessage() {
+    }
+
+    public LoginResponseMessage(boolean success, String reason) {
+        super(success, reason);
+    }
 }
