@@ -57,13 +57,13 @@ public class TestRedis {
                             buf.writeBytes(LINE);
                             buf.writeBytes("set".getBytes());
                             buf.writeBytes(LINE);
-                            buf.writeBytes("$3".getBytes());
+                            buf.writeBytes("$4".getBytes());
                             buf.writeBytes(LINE);
-                            buf.writeBytes("aaa".getBytes());
+                            buf.writeBytes("name".getBytes());
                             buf.writeBytes(LINE);
-                            buf.writeBytes("$3".getBytes());
+                            buf.writeBytes("$8".getBytes());
                             buf.writeBytes(LINE);
-                            buf.writeBytes("bbb".getBytes());
+                            buf.writeBytes("zhangsan".getBytes());
                             buf.writeBytes(LINE);
                             ctx.writeAndFlush(buf);
                         }
