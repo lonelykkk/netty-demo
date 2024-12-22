@@ -34,6 +34,7 @@ public class ChatServer {
         GroupMembersRequestMessageHandler GROUP_MEMBERS_HANDLER = new GroupMembersRequestMessageHandler();
         GroupQuitRequestMessageHandler GROUP_QUIT_HANDLER = new GroupQuitRequestMessageHandler();
         GroupChatRequestMessageHandler GROUP_CHAT_HANDLER = new GroupChatRequestMessageHandler();
+        QuitHandler QUIT_HANDLER = new QuitHandler();
         try {
             ServerBootstrap serverBootstrap = new ServerBootstrap();
             serverBootstrap.channel(NioServerSocketChannel.class);
@@ -51,6 +52,7 @@ public class ChatServer {
                     ch.pipeline().addLast(GROUP_MEMBERS_HANDLER);
                     ch.pipeline().addLast(GROUP_QUIT_HANDLER);
                     ch.pipeline().addLast(GROUP_CHAT_HANDLER);
+                    ch.pipeline().addLast(QUIT_HANDLER);
                 }
             });
             Channel channel = serverBootstrap.bind(8080).sync().channel();
