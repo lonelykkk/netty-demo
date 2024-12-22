@@ -14,6 +14,10 @@ import java.util.List;
 public class GroupChatRequestMessageHandler extends SimpleChannelInboundHandler<GroupChatRequestMessage> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, GroupChatRequestMessage msg) throws Exception {
-
+        List<Channel> channels = GroupSessionFactory.getGroupSession()
+                .getMembersChannel(msg.getGroupName());
+        for (Channel channel : channels) {
+            channel.writeAndFlush(new GroupChatResponseMessage(msg.getFrom(), msg.getContent()));
+        }
     }
 }
