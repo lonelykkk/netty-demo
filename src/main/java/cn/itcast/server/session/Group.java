@@ -18,6 +18,7 @@ public class Group {
     public static final Group EMPTY_GROUP = new Group("empty", Collections.emptySet());
 
     public Group(String name, Set<String> members) {
+        //
         this.name = name;
         this.members = members;
     }
