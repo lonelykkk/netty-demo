@@ -15,7 +15,7 @@ public class EventLoopServer {
     public static void main(String[] args) {
         // 细分2：创建一个独立的 EventLoopGroup
         EventLoopGroup group = new DefaultEventLoopGroup();
-        new ServerBootstrap()
+        ChannelFuture channelFuture = new ServerBootstrap()
                 // boss 和 worker
                 // 细分1：boss 只负责 ServerSocketChannel 上 accept 事件     worker 只负责 socketChannel 上的读写
                 .group(new NioEventLoopGroup(), new NioEventLoopGroup(2))
